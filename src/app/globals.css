@@ -35,6 +35,15 @@ body {
   overflow-x: hidden;
 }
 
+.hero-section {
+  height: 100vh;
+  height: 100svh;
+}
+
+.car-motion {
+  width: min(100%, 900px, 88svh);
+}
+
 /* Prevent FOUC — elements animated by GSAP start invisible */
 .gsap-hidden {
   visibility: hidden;

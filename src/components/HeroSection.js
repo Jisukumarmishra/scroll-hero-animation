@@ -6,9 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ------------------------------------------------------------------ */
-/*  Statistics data                                                    */
-/* ------------------------------------------------------------------ */
 const stats = [
   { value: "58%", label: "Bold design that stands out." },
   { value: "23%", label: "A fresh take on everyday performance." },
@@ -16,193 +13,125 @@ const stats = [
   { value: "40%", label: "A distinctive driving experience." },
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Component                                                          */
-/* ------------------------------------------------------------------ */
+function getCarMotion() {
+  const viewportWidth = window.innerWidth;
+
+  if (viewportWidth < 640) {
+    return { x: -32, y: -14, scale: 0.9, rotation: -1 };
+  }
+
+  if (viewportWidth < 1024) {
+    return { x: -120, y: -40, scale: 0.86, rotation: -2 };
+  }
+
+  return { x: -240, y: -70, scale: 0.82, rotation: -3 };
+}
+
 export default function HeroSection() {
   const containerRef = useRef(null);
-  const headlineRef = useRef(null);
-  const carRef = useRef(null);
-  const statsRef = useRef([]);
   const heroRef = useRef(null);
+  const headlineRef = useRef(null);
+  const headlineScrollRef = useRef(null);
+  const carMotionRef = useRef(null);
+  const carEntranceRef = useRef(null);
+  const statsRef = useRef([]);
+  const statsScrollRef = useRef(null);
   const scrollHintRef = useRef(null);
   const bgGlowRef = useRef(null);
 
   useEffect(() => {
-    /* Respect reduced-motion preference */
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
     if (prefersReducedMotion) {
-      document
-        .querySelectorAll(".gsap-hidden")
-        .forEach((el) => (el.style.visibility = "visible"));
+      containerRef.current
+        ?.querySelectorAll(".gsap-hidden")
+        .forEach((element) => {
+          element.style.visibility = "visible";
+        });
       return;
     }
 
-    /* GSAP context for clean React cleanup in Strict Mode */
     const ctx = gsap.context(() => {
-      /* --------------------------------------------------------------- */
-      /*  1. Intro timeline — time-based entrance sequence                */
-      /* --------------------------------------------------------------- */
-      const introTl = gsap.timeline({
-        defaults: { ease: "power3.out" },
-      });
+      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // Headline fades in and rises into position
-      introTl.fromTo(
+      intro.fromTo(
         headlineRef.current,
-        { y: 60, opacity: 0, visibility: "hidden" },
-        { y: 0, opacity: 1, visibility: "visible", duration: 1.2 }
+        { y: 52, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 1.1 }
       );
 
-      // Car slides in from right with scale
-      introTl.fromTo(
-        carRef.current,
-        { x: 150, opacity: 0, scale: 0.9, visibility: "hidden" },
+      intro.fromTo(
+        carEntranceRef.current,
+        { x: 120, scale: 0.94, autoAlpha: 0 },
+        { x: 0, scale: 1, autoAlpha: 1, duration: 1.25, ease: "power2.out" },
+        "-=0.65"
+      );
+
+      intro.fromTo(
+        statsRef.current.filter(Boolean),
+        { y: 28, autoAlpha: 0 },
         {
-          x: 0,
-          opacity: 1,
-          scale: 1,
-          visibility: "visible",
-          duration: 1.4,
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.65,
+          stagger: 0.16,
           ease: "power2.out",
         },
-        "-=0.7"
+        "-=0.55"
       );
 
-      // Statistics animate in sequentially with staggered delay
-      statsRef.current.forEach((stat, i) => {
-        if (!stat) return;
-        introTl.fromTo(
-          stat,
-          { y: 40, opacity: 0, visibility: "hidden" },
-          {
-            y: 0,
-            opacity: 1,
-            visibility: "visible",
-            duration: 0.7,
-            ease: "power2.out",
-          },
-          `-=${i === 0 ? 0.5 : 0.5}`
-        );
-      });
-
-      // Scroll hint fades in last
-      if (scrollHintRef.current) {
-        introTl.fromTo(
-          scrollHintRef.current,
-          { opacity: 0 },
-          { opacity: 0.4, duration: 0.6 },
-          "-=0.3"
-        );
-      }
-
-      /* --------------------------------------------------------------- */
-      /*  2. Scroll-driven car animation (scrubbed)                      */
-      /* --------------------------------------------------------------- */
-      const vw = window.innerWidth;
-      const isMobile = vw < 640;
-      const isTablet = vw >= 640 && vw < 1024;
-
-      // Responsive animation distances
-      const xDistance = isMobile ? -60 : isTablet ? -180 : -320;
-      const yDistance = isMobile ? -30 : isTablet ? -50 : -100;
-      const scaleEnd = isMobile ? 0.88 : isTablet ? 0.85 : 0.82;
-      const rotateEnd = isMobile ? -1 : -3;
-
-      /*
-       * Pin the hero section for the duration of 100vh of extra scroll,
-       * giving enough scroll distance for a smooth car movement.
-       * "end: +=100%" means the pin lasts for one additional viewport height.
-       */
-      const scrollTl = gsap.timeline({
+      const scrollTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: heroRef.current,
           start: "top top",
-          end: "+=100%",
-          scrub: 1.2,
+          end: () => `+=${window.innerHeight}`,
+          scrub: 1,
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
 
-      // Car cinematic movement: translate left-upward, scale down, slight rotation
-      scrollTl.to(
-        carRef.current,
+      scrollTimeline.to(
+        carMotionRef.current,
         {
-          x: xDistance,
-          y: yDistance,
-          scale: scaleEnd,
-          rotation: rotateEnd,
+          x: () => getCarMotion().x,
+          y: () => getCarMotion().y,
+          scale: () => getCarMotion().scale,
+          rotation: () => getCarMotion().rotation,
           duration: 1,
           ease: "none",
         },
         0
       );
 
-      // Headline fades and drifts upward as user scrolls
-      scrollTl.to(
-        headlineRef.current,
-        {
-          y: -60,
-          opacity: 0.15,
-          scale: 0.95,
-          duration: 1,
-          ease: "none",
-        },
+      scrollTimeline.to(
+        headlineScrollRef.current,
+        { y: -48, autoAlpha: 0.18, scale: 0.96, duration: 1, ease: "none" },
         0
       );
 
-      // Stats fade out with slight upward drift
-      scrollTl.to(
-        statsRef.current.filter(Boolean),
-        {
-          y: -30,
-          opacity: 0,
-          duration: 0.7,
-          stagger: 0.04,
-          ease: "none",
-        },
+      scrollTimeline.to(
+        statsScrollRef.current,
+        { y: -24, autoAlpha: 0, duration: 1, ease: "none" },
         0
       );
 
-      // Background glow shifts color as scroll progresses
-      if (bgGlowRef.current) {
-        scrollTl.to(
-          bgGlowRef.current,
-          {
-            opacity: 0.35,
-            scale: 1.3,
-            duration: 1,
-            ease: "none",
-          },
-          0
-        );
-      }
+      scrollTimeline.to(
+        bgGlowRef.current,
+        { opacity: 0.34, scale: 1.22, duration: 1, ease: "none" },
+        0
+      );
 
-      // Scroll hint hides immediately on scroll
-      if (scrollHintRef.current) {
-        scrollTl.to(
-          scrollHintRef.current,
-          {
-            opacity: 0,
-            duration: 0.15,
-            ease: "none",
-          },
-          0
-        );
-      }
+      scrollTimeline.to(
+        scrollHintRef.current,
+        { autoAlpha: 0, duration: 0.15, ease: "none" },
+        0
+      );
 
-      /* Refresh ScrollTrigger after everything loads */
-      const handleLoad = () => ScrollTrigger.refresh();
-      window.addEventListener("load", handleLoad);
-
-      return () => {
-        window.removeEventListener("load", handleLoad);
-      };
+      ScrollTrigger.refresh();
     }, containerRef);
 
     return () => ctx.revert();
@@ -210,108 +139,88 @@ export default function HeroSection() {
 
   return (
     <div ref={containerRef}>
-      {/* ============================================================= */}
-      {/*  HERO — pinned during scroll-driven car animation              */}
-      {/* ============================================================= */}
       <section
         ref={heroRef}
-        className="relative w-full h-screen overflow-hidden bg-[#0a0a0a]"
+        className="hero-section relative w-full overflow-hidden bg-[#0a0a0a]"
         aria-label="Hero section"
       >
-        {/* ── Background ── */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="pointer-events-none absolute inset-0"
           aria-hidden="true"
         >
-          {/* Base gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#111] via-[#0a0a0a] to-[#050505]" />
-
-          {/* Warm ambient glow behind the car area */}
           <div
             ref={bgGlowRef}
-            className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-[#1a1510] opacity-20 blur-[140px]"
+            className="absolute left-1/2 top-[15%] h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-[#1a1510] opacity-20 blur-[140px]"
           />
-
-          {/* Subtle side vignettes */}
           <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black/40 to-transparent" />
           <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black/40 to-transparent" />
         </div>
 
-        {/* ── Content ── */}
-        <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 sm:px-8 lg:px-16">
-          {/* Headline */}
-          <h1
-            ref={headlineRef}
-            className="gsap-hidden text-center select-none"
-          >
-            <span className="block text-[clamp(1.8rem,7vw,5.5rem)] font-bold uppercase tracking-[0.3em] sm:tracking-[0.4em] lg:tracking-[0.5em] text-white/90 leading-tight">
-              Welcome
-            </span>
-            <span className="block text-[clamp(2.2rem,9vw,7.5rem)] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] lg:tracking-[0.5em] bg-gradient-to-r from-[#c0a46e] via-[#e8d5a3] to-[#c0a46e] bg-clip-text text-transparent leading-none mt-1 sm:mt-2">
-              Itz Fizz
-            </span>
-          </h1>
+        <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-8 lg:px-16">
+          <div ref={headlineScrollRef} className="text-center">
+            <h1 ref={headlineRef} className="gsap-hidden select-none">
+              <span className="block text-[clamp(1.8rem,7vw,5.5rem)] font-bold uppercase leading-tight tracking-[0.3em] text-white/90 sm:tracking-[0.4em] lg:tracking-[0.5em]">
+                Welcome
+              </span>
+              <span className="mt-1 block bg-gradient-to-r from-[#c0a46e] via-[#e8d5a3] to-[#c0a46e] bg-clip-text text-[clamp(2.2rem,9vw,7.5rem)] font-black uppercase leading-none tracking-[0.3em] text-transparent sm:mt-2 sm:tracking-[0.4em] lg:tracking-[0.5em]">
+                Itz Fizz
+              </span>
+            </h1>
+          </div>
 
-          {/* Car Image */}
           <div
-            ref={carRef}
-            className="gsap-hidden relative w-full max-w-[850px] mt-2 sm:mt-4 lg:mt-6"
+            ref={carMotionRef}
+            className="car-motion relative mt-1 sm:mt-3"
             style={{ willChange: "transform" }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/car.svg`}
-              alt="Luxury sports car — hero visual"
-              width={1200}
-              height={500}
-              className="w-full h-auto object-contain drop-shadow-[0_25px_80px_rgba(192,164,110,0.12)]"
-              fetchPriority="high"
-            />
-          </div>
-
-          {/* Statistics */}
-          <div className="w-full max-w-4xl mt-6 sm:mt-8 lg:mt-12 px-2">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-              {stats.map((stat, i) => (
-                <div
-                  key={stat.value}
-                  ref={(el) => (statsRef.current[i] = el)}
-                  className="gsap-hidden text-center"
-                >
-                  <p className="text-[clamp(1.6rem,3.5vw,2.8rem)] font-bold text-[#c0a46e] leading-none font-mono">
-                    {stat.value}
-                  </p>
-                  <p className="mt-2 text-[clamp(0.65rem,1.1vw,0.8rem)] text-[#777] leading-snug tracking-wider uppercase">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
+            <div ref={carEntranceRef} className="gsap-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/car-hero-v2.png`}
+                alt="Graphite luxury sports coupe with warm studio highlights"
+                width={1774}
+                height={887}
+                className="h-auto w-full object-contain drop-shadow-[0_25px_80px_rgba(192,164,110,0.14)]"
+                fetchPriority="high"
+                onLoad={() => ScrollTrigger.refresh()}
+              />
             </div>
           </div>
+
+          <dl
+            ref={statsScrollRef}
+            className="mt-4 grid w-full max-w-4xl grid-cols-2 gap-x-4 gap-y-5 px-2 sm:mt-6 sm:gap-x-6 lg:mt-8 lg:grid-cols-4 lg:gap-8"
+          >
+            {stats.map((stat, index) => (
+              <div
+                key={stat.value}
+                ref={(element) => {
+                  statsRef.current[index] = element;
+                }}
+                className="gsap-hidden text-center"
+              >
+                <dt className="font-mono text-[clamp(1.6rem,3.5vw,2.8rem)] font-bold leading-none text-[#c0a46e]">
+                  {stat.value}
+                </dt>
+                <dd className="mt-2 text-[clamp(0.65rem,1.1vw,0.8rem)] uppercase leading-snug tracking-wider text-[#999]">
+                  {stat.label}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        {/* Scroll hint indicator */}
         <div
           ref={scrollHintRef}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          style={{ opacity: 0 }}
+          className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-8"
+          style={{ opacity: 0.45 }}
           aria-hidden="true"
         >
-          <span className="text-[10px] tracking-[0.35em] uppercase text-[#666] font-light">
+          <span className="text-[10px] font-light uppercase tracking-[0.35em] text-[#777]">
             Scroll
           </span>
-          <div className="w-px h-10 bg-gradient-to-b from-[#666] to-transparent" />
-        </div>
-      </section>
-
-      {/* ============================================================= */}
-      {/*  After-scroll content — provides space below the pinned hero   */}
-      {/* ============================================================= */}
-      <section className="relative w-full min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="text-center px-6">
-          <p className="text-[#555] text-sm sm:text-base tracking-[0.25em] uppercase font-light">
-            The journey begins here
-          </p>
+          <div className="h-10 w-px bg-gradient-to-b from-[#777] to-transparent" />
         </div>
       </section>
     </div>
