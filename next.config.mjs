@@ -1,6 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  /* Static export for GitHub Pages deployment */
+  output: "export",
+
+  /*
+   * GitHub Pages serves from /<repo-name>/ by default.
+   * Set basePath and assetPrefix to the repository name.
+   * Adjust if deploying to a custom domain (remove both).
+   */
+  basePath: "/scroll-hero-animation",
+  assetPrefix: "/scroll-hero-animation/",
+
+  /* next/image is not supported in static export — use unoptimized */
+  images: {
+    unoptimized: true,
+  },
+
   turbopack: {
     rules: {
       "*.css": {
