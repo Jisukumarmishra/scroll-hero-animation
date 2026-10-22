@@ -160,10 +160,10 @@ export default function HeroSection() {
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-8 lg:px-16">
           <div ref={headlineScrollRef} className="text-center">
             <h1 ref={headlineRef} className="gsap-hidden select-none">
-              <span className="block text-[clamp(1.8rem,7vw,5.5rem)] font-bold uppercase leading-tight tracking-[0.3em] text-white/90 sm:tracking-[0.4em] lg:tracking-[0.5em]">
+              <span className="hero-headline-primary block text-[clamp(1.8rem,7vw,5.5rem)] font-bold uppercase leading-tight tracking-[0.3em] text-white/90 sm:tracking-[0.4em] lg:tracking-[0.5em]">
                 Welcome
               </span>
-              <span className="mt-1 block bg-gradient-to-r from-[#c0a46e] via-[#e8d5a3] to-[#c0a46e] bg-clip-text text-[clamp(2.2rem,9vw,7.5rem)] font-black uppercase leading-none tracking-[0.3em] text-transparent sm:mt-2 sm:tracking-[0.4em] lg:tracking-[0.5em]">
+              <span className="hero-headline-secondary mt-1 block bg-gradient-to-r from-[#c0a46e] via-[#e8d5a3] to-[#c0a46e] bg-clip-text text-[clamp(2.2rem,9vw,7.5rem)] font-black uppercase leading-none tracking-[0.3em] text-transparent sm:mt-2 sm:tracking-[0.4em] lg:tracking-[0.5em]">
                 Itz Fizz
               </span>
             </h1>
@@ -190,7 +190,7 @@ export default function HeroSection() {
 
           <dl
             ref={statsScrollRef}
-            className="mt-4 grid w-full max-w-4xl grid-cols-2 gap-x-4 gap-y-5 px-2 sm:mt-6 sm:gap-x-6 lg:mt-8 lg:grid-cols-4 lg:gap-8"
+            className="hero-stats mt-4 grid w-full max-w-4xl grid-cols-2 gap-x-4 gap-y-5 px-2 sm:mt-6 sm:gap-x-6 lg:mt-8 lg:grid-cols-4 lg:gap-8"
           >
             {stats.map((stat, index) => (
               <div
@@ -198,7 +198,7 @@ export default function HeroSection() {
                 ref={(element) => {
                   statsRef.current[index] = element;
                 }}
-                className="gsap-hidden text-center"
+                className="hero-stat gsap-hidden text-center"
               >
                 <dt className="font-mono text-[clamp(1.6rem,3.5vw,2.8rem)] font-bold leading-none text-[#c0a46e]">
                   {stat.value}
@@ -213,7 +213,7 @@ export default function HeroSection() {
 
         <div
           ref={scrollHintRef}
-          className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-8"
+          className="hero-scroll-hint absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-8"
           style={{ opacity: 0.45 }}
           aria-hidden="true"
         >

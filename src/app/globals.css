@@ -44,6 +44,57 @@ body {
   width: min(100%, 900px, 88svh);
 }
 
+/* Keep all hero content visible on short screens, especially landscape phones. */
+@media (max-height: 600px) {
+  .hero-headline-primary {
+    font-size: clamp(1.15rem, 6vw, 3.25rem);
+    letter-spacing: 0.3em;
+  }
+
+  .hero-headline-secondary {
+    font-size: clamp(1.4rem, 7.5vw, 4.5rem);
+    letter-spacing: 0.3em;
+  }
+
+  .car-motion {
+    width: min(100%, 900px, 72svh);
+  }
+
+  .hero-stats {
+    margin-top: 0.5rem;
+    row-gap: 0.5rem;
+  }
+
+  .hero-stat dt {
+    font-size: clamp(1.25rem, 4vh, 2rem);
+  }
+
+  .hero-stat dd {
+    margin-top: 0.25rem;
+    font-size: clamp(0.55rem, 1.5vh, 0.7rem);
+  }
+
+  .hero-scroll-hint {
+    bottom: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .hero-scroll-hint > div {
+    height: 1rem;
+  }
+}
+
+@media (max-height: 600px) and (min-width: 640px) {
+  .hero-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .hero-stat dd {
+    font-size: clamp(0.55rem, 1.25vh, 0.7rem);
+  }
+}
+
 /* Prevent FOUC — elements animated by GSAP start invisible */
 .gsap-hidden {
   visibility: hidden;
