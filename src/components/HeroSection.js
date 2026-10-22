@@ -7,10 +7,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
-  { value: "58%", label: "Bold design that stands out." },
-  { value: "23%", label: "A fresh take on everyday performance." },
-  { value: "27%", label: "Made for people who move differently." },
-  { value: "40%", label: "A distinctive driving experience." },
+  { value: "58%", label: "A bold, distinctive silhouette." },
+  { value: "23%", label: "Everyday performance, elevated." },
+  { value: "27%", label: "Built for a different perspective." },
+  { value: "40%", label: "An unmistakable drive." },
 ];
 
 function getCarMotion() {
@@ -176,24 +176,41 @@ export default function HeroSection() {
     <div ref={containerRef}>
       <section
         ref={heroRef}
-        className="hero-section relative w-full overflow-hidden bg-[#0a0a0a]"
+        className="hero-section relative w-full overflow-hidden"
         aria-label="Hero section"
       >
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden="true"
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-[#111] via-[#0a0a0a] to-[#050505]" />
+        <div className="hero-backdrop pointer-events-none absolute inset-0" aria-hidden="true">
+          <div className="hero-grid absolute inset-0" />
           <div
             ref={bgGlowRef}
-            className="absolute left-1/2 top-[15%] h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-[#1a1510] opacity-20 blur-[140px]"
+            className="hero-glow absolute left-1/2 top-[12%] h-[600px] w-[900px] -translate-x-1/2 rounded-full"
           />
-          <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black/40 to-transparent" />
-          <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black/40 to-transparent" />
+          <div className="hero-horizon absolute inset-x-0" />
+          <div className="hero-floor-glow absolute left-1/2" />
         </div>
 
-        <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-14 sm:px-8 sm:pb-16 lg:px-16">
-          <div ref={headlineScrollRef} className="text-center">
+        <header className="hero-header absolute inset-x-0 top-0 z-20 flex items-center justify-between">
+          <div className="hero-brand flex items-center gap-3">
+            <span className="hero-brand-mark grid place-items-center">IF</span>
+            <span className="flex flex-col">
+              <span className="hero-brand-name">ITZ FIZZ</span>
+              <span className="hero-brand-caption">Automotive studio</span>
+            </span>
+          </div>
+          <span className="hero-header-center hidden sm:block">
+            The art of motion
+          </span>
+          <span className="hero-edition flex items-center gap-2">
+            <span className="hero-edition-dot" />
+            <span>Concept 01</span>
+          </span>
+        </header>
+
+        <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-4 pb-16 pt-20 sm:px-8 sm:pb-20 sm:pt-24 lg:px-16">
+          <div ref={headlineScrollRef} className="hero-title-block text-center">
+            <p className="hero-kicker">
+              <span /> A study in design and performance <span />
+            </p>
             <h1 ref={headlineRef} className="gsap-hidden select-none">
               <span className="hero-headline-primary block text-[clamp(1.8rem,7vw,5.5rem)] font-bold uppercase leading-tight tracking-[0.3em] text-white/90 sm:tracking-[0.4em] lg:tracking-[0.5em]">
                 Welcome
@@ -202,21 +219,24 @@ export default function HeroSection() {
                 Itz Fizz
               </span>
             </h1>
+            <p className="hero-caption">
+              Presence in every line. Purpose in every drive.
+            </p>
           </div>
 
           <div
             ref={carMotionRef}
-            className="car-motion relative mt-1 sm:mt-3"
+            className="car-motion hero-car-stage relative mt-1 sm:mt-3"
             style={{ willChange: "transform" }}
           >
-            <div ref={carEntranceRef} className="gsap-hidden">
+            <div ref={carEntranceRef} className="hero-car-image gsap-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/car-hero-v2.png`}
                 alt="Graphite luxury sports coupe with warm studio highlights"
                 width={1774}
                 height={887}
-                className="h-auto w-full object-contain drop-shadow-[0_25px_80px_rgba(192,164,110,0.14)]"
+                className="h-auto w-full object-contain"
                 fetchPriority="high"
                 onLoad={() => ScrollTrigger.refresh()}
               />
@@ -225,7 +245,7 @@ export default function HeroSection() {
 
           <dl
             ref={statsScrollRef}
-            className="hero-stats mt-4 grid w-full max-w-4xl grid-cols-2 gap-x-4 gap-y-5 px-2 sm:mt-6 sm:gap-x-6 lg:mt-8 lg:grid-cols-4 lg:gap-8"
+            className="hero-stats mt-4 grid w-full max-w-5xl grid-cols-2 gap-x-4 gap-y-5 px-2 sm:mt-6 sm:grid-cols-4 sm:gap-x-6 lg:mt-8 lg:gap-8"
           >
             {stats.map((stat, index) => (
               <div
@@ -236,7 +256,10 @@ export default function HeroSection() {
                 className="hero-stat gsap-hidden text-center"
               >
                 <dt className="font-mono text-[clamp(1.6rem,3.5vw,2.8rem)] font-bold leading-none text-[#c0a46e]">
-                  {stat.value}
+                  <span className="hero-stat-index" aria-hidden="true">
+                    0{index + 1}
+                  </span>
+                  <span className="hero-stat-value">{stat.value}</span>
                 </dt>
                 <dd className="mt-2 text-[clamp(0.65rem,1.1vw,0.8rem)] uppercase leading-snug tracking-wider text-[#999]">
                   {stat.label}
@@ -257,7 +280,7 @@ export default function HeroSection() {
             ref={scrollControlRef}
             type="button"
             onClick={handleScrollControl}
-            className="hero-scroll-hint absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/15 bg-black/50 px-5 py-3 text-[10px] font-medium uppercase tracking-[0.25em] text-white/75 transition-colors hover:border-[#c0a46e]/60 hover:text-[#e8d5a3] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c0a46e] disabled:cursor-not-allowed disabled:opacity-50 sm:bottom-7"
+            className="hero-scroll-hint absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/15 bg-[#0b0b0bd9] px-5 py-3 text-[10px] font-medium uppercase tracking-[0.25em] text-white/75 transition-colors hover:border-[#c0a46e]/60 hover:text-[#e8d5a3] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c0a46e] disabled:cursor-not-allowed disabled:opacity-50 sm:bottom-7"
             aria-label="Scroll through the hero animation or return to the start"
           >
             <span ref={scrollControlLabelRef}>Scroll to explore</span>
