@@ -36,8 +36,23 @@ export default function HeroSection() {
   const carEntranceRef = useRef(null);
   const statsRef = useRef([]);
   const statsScrollRef = useRef(null);
-  const scrollHintRef = useRef(null);
+  const scrollControlRef = useRef(null);
+  const scrollControlLabelRef = useRef(null);
+  const scrollControlIconRef = useRef(null);
+  const scrollProgressRef = useRef(null);
+  const scrollTriggerRef = useRef(null);
+  const prefersReducedMotionRef = useRef(false);
   const bgGlowRef = useRef(null);
+
+  const handleScrollControl = () => {
+    const trigger = scrollTriggerRef.current;
+    if (!trigger || prefersReducedMotionRef.current) return;
+
+    window.scrollTo({
+      top: trigger.progress < 0.5 ? trigger.end : trigger.start,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -45,6 +60,11 @@ export default function HeroSection() {
     ).matches;
 
     if (prefersReducedMotion) {
+      prefersReducedMotionRef.current = true;
+      if (scrollControlRef.current) scrollControlRef.current.disabled = true;
+      if (scrollControlLabelRef.current) {
+        scrollControlLabelRef.current.textContent = "Motion reduced";
+      }
       containerRef.current
         ?.querySelectorAll(".gsap-hidden")
         .forEach((element) => {
@@ -91,6 +111,22 @@ export default function HeroSection() {
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            if (scrollProgressRef.current) {
+              gsap.set(scrollProgressRef.current, { scaleX: self.progress });
+            }
+
+            if (scrollControlLabelRef.current) {
+              scrollControlLabelRef.current.textContent =
+                self.progress >= 0.5 ? "Return to start" : "Scroll to explore";
+            }
+
+            if (scrollControlIconRef.current) {
+              gsap.set(scrollControlIconRef.current, {
+                rotation: self.progress >= 0.5 ? 180 : 0,
+              });
+            }
+          },
         },
       });
 
@@ -125,16 +161,15 @@ export default function HeroSection() {
         0
       );
 
-      scrollTimeline.to(
-        scrollHintRef.current,
-        { autoAlpha: 0, duration: 0.15, ease: "none" },
-        0
-      );
+      scrollTriggerRef.current = scrollTimeline.scrollTrigger;
 
       ScrollTrigger.refresh();
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      scrollTriggerRef.current = null;
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -157,7 +192,7 @@ export default function HeroSection() {
           <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black/40 to-transparent" />
         </div>
 
-        <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-8 lg:px-16">
+        <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-14 sm:px-8 sm:pb-16 lg:px-16">
           <div ref={headlineScrollRef} className="text-center">
             <h1 ref={headlineRef} className="gsap-hidden select-none">
               <span className="hero-headline-primary block text-[clamp(1.8rem,7vw,5.5rem)] font-bold uppercase leading-tight tracking-[0.3em] text-white/90 sm:tracking-[0.4em] lg:tracking-[0.5em]">
@@ -211,16 +246,37 @@ export default function HeroSection() {
           </dl>
         </div>
 
-        <div
-          ref={scrollHintRef}
-          className="hero-scroll-hint absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-8"
-          style={{ opacity: 0.45 }}
-          aria-hidden="true"
-        >
-          <span className="text-[10px] font-light uppercase tracking-[0.35em] text-[#777]">
-            Scroll
-          </span>
-          <div className="h-10 w-px bg-gradient-to-b from-[#777] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 z-20">
+          <div className="h-px bg-white/10" aria-hidden="true">
+            <div
+              ref={scrollProgressRef}
+              className="h-full origin-left scale-x-0 bg-[#c0a46e]"
+            />
+          </div>
+          <button
+            ref={scrollControlRef}
+            type="button"
+            onClick={handleScrollControl}
+            className="hero-scroll-hint absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/15 bg-black/50 px-5 py-3 text-[10px] font-medium uppercase tracking-[0.25em] text-white/75 transition-colors hover:border-[#c0a46e]/60 hover:text-[#e8d5a3] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c0a46e] disabled:cursor-not-allowed disabled:opacity-50 sm:bottom-7"
+            aria-label="Scroll through the hero animation or return to the start"
+          >
+            <span ref={scrollControlLabelRef}>Scroll to explore</span>
+            <svg
+              ref={scrollControlIconRef}
+              className="h-3 w-3"
+              viewBox="0 0 12 12"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M6 1.5v8m0 0L2.5 6m3.5 3.5L9.5 6"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
         </div>
       </section>
     </div>
