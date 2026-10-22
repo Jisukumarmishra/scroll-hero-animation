@@ -23,7 +23,12 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
-      <body>{children}</body>
+      <body>
+        <noscript>
+          <style>{`.gsap-hidden { visibility: visible !important; }`}</style>
+        </noscript>
+        {children}
+      </body>
     </html>
   );
 }
