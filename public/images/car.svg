@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" fill="none">
+  <defs>
+    <!-- Car body gradient -->
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a2a"/>
+      <stop offset="30%" stop-color="#1a1a1a"/>
+      <stop offset="70%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#0d0d0d"/>
+    </linearGradient>
+    <!-- Top highlight -->
+    <linearGradient id="topHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#444"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <!-- Window gradient -->
+    <linearGradient id="windowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334455"/>
+      <stop offset="50%" stop-color="#1a2533"/>
+      <stop offset="100%" stop-color="#0f1a25"/>
+    </linearGradient>
+    <!-- Headlight glow -->
+    <radialGradient id="headlightGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c0a46e" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#c0a46e" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#c0a46e" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Taillight glow -->
+    <radialGradient id="taillightGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff2020" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#ff2020" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ff2020" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Wheel gradient -->
+    <radialGradient id="wheelGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#333"/>
+      <stop offset="40%" stop-color="#222"/>
+      <stop offset="80%" stop-color="#111"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </radialGradient>
+    <!-- Rim gradient -->
+    <radialGradient id="rimGrad" cx="40%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#666"/>
+      <stop offset="50%" stop-color="#444"/>
+      <stop offset="100%" stop-color="#222"/>
+    </radialGradient>
+    <!-- Ground shadow -->
+    <radialGradient id="groundShadow" cx="50%" cy="50%" rx="50%" ry="50%">
+      <stop offset="0%" stop-color="#000" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Body reflection -->
+    <linearGradient id="bodyReflection" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Accent line -->
+    <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c0a46e" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#c0a46e" stop-opacity="0.6"/>
+      <stop offset="80%" stop-color="#c0a46e" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#c0a46e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground shadow ellipse -->
+  <ellipse cx="580" cy="395" rx="420" ry="25" fill="url(#groundShadow)"/>
+
+  <!-- === CAR BODY === -->
+  <!-- Main body lower -->
+  <path d="M180 310 Q180 280 220 265 L320 250 L880 245 Q960 245 1000 265 L1030 280 Q1050 300 1040 330 L1040 355 Q1040 370 1025 375 L170 375 Q155 370 155 355 L155 340 Q155 320 180 310 Z" fill="url(#bodyGrad)" stroke="#1a1a1a" stroke-width="1"/>
+
+  <!-- Body top / roof line -->
+  <path d="M350 250 Q370 180 430 155 L640 140 Q720 140 760 155 L820 180 Q860 210 880 245 L350 250 Z" fill="url(#topHighlight)" stroke="#222" stroke-width="0.5"/>
+
+  <!-- Body reflection highlight -->
+  <path d="M350 250 Q370 180 430 155 L640 140 Q720 140 760 155 L820 180 Q860 210 880 245 L350 250 Z" fill="url(#bodyReflection)"/>
+
+  <!-- Window -->
+  <path d="M380 248 Q395 195 440 170 L630 158 Q700 158 740 172 L790 195 Q820 218 840 245 L380 248 Z" fill="url(#windowGrad)" stroke="#333" stroke-width="1"/>
+
+  <!-- Window divider (B-pillar) -->
+  <line x1="615" y1="158" x2="610" y2="248" stroke="#222" stroke-width="4"/>
+
+  <!-- Side body line / character line -->
+  <path d="M210 300 L1020 295" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Lower accent line (gold) -->
+  <path d="M230 340 L1010 335" stroke="url(#accentLine)" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Door line -->
+  <path d="M500 250 L495 370" stroke="#222" stroke-width="1.5"/>
+
+  <!-- Side skirt detail -->
+  <path d="M200 365 Q200 355 220 350 L990 345 Q1010 348 1010 358 L1010 372 L200 375 Z" fill="#0d0d0d" stroke="#1a1a1a" stroke-width="0.5"/>
+
+  <!-- === FRONT === -->
+  <!-- Front bumper -->
+  <path d="M155 340 Q140 340 130 350 Q120 360 125 375 L170 375 L155 340 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
+
+  <!-- Front grille -->
+  <path d="M135 355 Q130 360 132 370 L168 372 L158 348 Q145 350 135 355 Z" fill="#0a0a0a" stroke="#222" stroke-width="0.5"/>
+
+  <!-- Grille mesh lines -->
+  <line x1="138" y1="358" x2="165" y2="355" stroke="#222" stroke-width="0.8"/>
+  <line x1="136" y1="363" x2="167" y2="360" stroke="#222" stroke-width="0.8"/>
+  <line x1="134" y1="368" x2="168" y2="365" stroke="#222" stroke-width="0.8"/>
+
+  <!-- Headlight -->
+  <path d="M160 290 Q150 290 145 300 L138 325 Q135 335 142 340 L165 338 L180 290 Z" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+  <!-- Headlight inner LED strip -->
+  <path d="M158 300 L152 325 Q150 332 155 335 L162 334 L170 298 Z" fill="#ddd" opacity="0.5"/>
+  <!-- Headlight DRL (amber accent) -->
+  <path d="M156 305 L151 328" stroke="#c0a46e" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Headlight glow effect -->
+  <circle cx="155" cy="315" r="25" fill="url(#headlightGlow)" opacity="0.5"/>
+
+  <!-- === REAR === -->
+  <!-- Rear bumper -->
+  <path d="M1025 335 Q1045 340 1055 350 Q1065 360 1060 375 L1025 375 L1025 335 Z" fill="#111" stroke="#1a1a1a" stroke-width="0.5"/>
+
+  <!-- Taillight -->
+  <path d="M1020 280 Q1035 280 1042 290 L1050 320 Q1052 330 1045 338 L1025 340 L1020 280 Z" fill="#220000" stroke="#333" stroke-width="1"/>
+  <!-- Taillight LED strip -->
+  <path d="M1028 290 L1038 325" stroke="#ff2020" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+  <!-- Taillight glow -->
+  <circle cx="1035" cy="310" r="20" fill="url(#taillightGlow)" opacity="0.4"/>
+
+  <!-- Rear diffuser -->
+  <path d="M1025 368 L1058 370 Q1062 370 1060 375 L1025 375 Z" fill="#0a0a0a"/>
+  <!-- Exhaust tips -->
+  <ellipse cx="1040" cy="373" rx="6" ry="3" fill="#222" stroke="#444" stroke-width="0.5"/>
+  <ellipse cx="1053" cy="373" rx="5" ry="2.5" fill="#222" stroke="#444" stroke-width="0.5"/>
+
+  <!-- === WHEELS === -->
+  <!-- Front wheel -->
+  <g>
+    <circle cx="310" cy="375" r="52" fill="url(#wheelGrad)" stroke="#111" stroke-width="2"/>
+    <circle cx="310" cy="375" r="38" fill="url(#rimGrad)" stroke="#333" stroke-width="1.5"/>
+    <!-- Spokes -->
+    <g stroke="#555" stroke-width="2.5" stroke-linecap="round">
+      <line x1="310" y1="345" x2="310" y2="358"/>
+      <line x1="338" y1="362" x2="327" y2="368"/>
+      <line x1="330" y1="393" x2="322" y2="385"/>
+      <line x1="290" y1="393" x2="298" y2="385"/>
+      <line x1="282" y1="362" x2="293" y2="368"/>
+    </g>
+    <!-- Hub -->
+    <circle cx="310" cy="375" r="10" fill="#333" stroke="#555" stroke-width="1"/>
+    <circle cx="310" cy="375" r="4" fill="#444"/>
+    <!-- Brake disc visible through spokes -->
+    <circle cx="310" cy="375" r="30" fill="none" stroke="#292929" stroke-width="1" stroke-dasharray="3 3"/>
+    <!-- Tire sidewall detail -->
+    <circle cx="310" cy="375" r="48" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Rear wheel -->
+  <g>
+    <circle cx="850" cy="375" r="52" fill="url(#wheelGrad)" stroke="#111" stroke-width="2"/>
+    <circle cx="850" cy="375" r="38" fill="url(#rimGrad)" stroke="#333" stroke-width="1.5"/>
+    <!-- Spokes -->
+    <g stroke="#555" stroke-width="2.5" stroke-linecap="round">
+      <line x1="850" y1="345" x2="850" y2="358"/>
+      <line x1="878" y1="362" x2="867" y2="368"/>
+      <line x1="870" y1="393" x2="862" y2="385"/>
+      <line x1="830" y1="393" x2="838" y2="385"/>
+      <line x1="822" y1="362" x2="833" y2="368"/>
+    </g>
+    <!-- Hub -->
+    <circle cx="850" cy="375" r="10" fill="#333" stroke="#555" stroke-width="1"/>
+    <circle cx="850" cy="375" r="4" fill="#444"/>
+    <!-- Brake disc -->
+    <circle cx="850" cy="375" r="30" fill="none" stroke="#292929" stroke-width="1" stroke-dasharray="3 3"/>
+    <!-- Tire sidewall -->
+    <circle cx="850" cy="375" r="48" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Wheel arch shadow (front) -->
+  <path d="M240 365 Q245 310 310 300 Q375 310 380 365" fill="none" stroke="#0a0a0a" stroke-width="3"/>
+
+  <!-- Wheel arch shadow (rear) -->
+  <path d="M780 360 Q785 305 850 295 Q915 305 920 360" fill="none" stroke="#0a0a0a" stroke-width="3"/>
+
+  <!-- === DETAILS === -->
+  <!-- Side mirror -->
+  <path d="M365 220 Q355 215 350 220 L348 240 Q348 248 358 250 L368 248 L370 225 Q370 218 365 220 Z" fill="#1a1a1a" stroke="#333" stroke-width="0.5"/>
+
+  <!-- Roof antenna (shark fin) -->
+  <path d="M660 140 L670 138 Q675 135 672 130 L665 128 Q658 130 660 138 Z" fill="#1a1a1a"/>
+
+  <!-- Front lip spoiler -->
+  <path d="M130 375 Q125 380 130 382 L170 380 L130 375 Z" fill="#111"/>
+
+  <!-- Rear lip spoiler -->
+  <path d="M860 240 Q870 235 890 238 L895 243 L860 245 Z" fill="#1a1a1a" stroke="#222" stroke-width="0.5"/>
+
+  <!-- Door handle -->
+  <rect x="520" y="290" width="28" height="5" rx="2.5" fill="#333"/>
+
+  <!-- Front air intake -->
+  <path d="M180 355 Q175 348 185 345 L250 342 Q255 345 252 352 L180 355 Z" fill="#0a0a0a"/>
+
+  <!-- Side vent behind front wheel -->
+  <g>
+    <path d="M385 310 L410 308 L408 330 L383 332 Z" fill="#0d0d0d"/>
+    <line x1="390" y1="312" x2="388" y2="328" stroke="#222" stroke-width="0.8"/>
+    <line x1="395" y1="311" x2="393" y2="327" stroke="#222" stroke-width="0.8"/>
+    <line x1="400" y1="310" x2="398" y2="326" stroke="#222" stroke-width="0.8"/>
+  </g>
+</svg>
