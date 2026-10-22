@@ -42,6 +42,15 @@ body {
   background: #08090b;
 }
 
+.hero-section::before {
+  position: absolute;
+  z-index: 15;
+  inset: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  content: "";
+  pointer-events: none;
+}
+
 .hero-backdrop {
   background:
     radial-gradient(ellipse at 50% 42%, rgba(192, 164, 110, 0.1), transparent 43%),
@@ -118,7 +127,10 @@ body {
 
 .hero-edition {
   border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.025);
   padding: 0.55rem 0.75rem;
+  backdrop-filter: blur(12px);
 }
 
 .hero-edition-dot {
@@ -153,10 +165,10 @@ body {
 }
 
 .hero-headline-primary {
-  color: rgba(255, 255, 255, 0.76);
-  font-size: clamp(0.95rem, 1.6vw, 1.3rem);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(1.15rem, 2.1vw, 1.8rem);
   font-weight: 400;
-  letter-spacing: 0.55em;
+  letter-spacing: 0.42em;
   line-height: 1.6;
 }
 
@@ -171,9 +183,9 @@ body {
 
 .hero-caption {
   margin: 0.75rem 0 0;
-  color: rgba(255, 255, 255, 0.42);
-  font-size: 0.57rem;
-  letter-spacing: 0.19em;
+  color: rgba(255, 255, 255, 0.54);
+  font-size: 0.62rem;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
 }
 
@@ -214,6 +226,7 @@ body {
 }
 
 .hero-stat {
+  position: relative;
   min-width: 0;
   padding: 0.1rem 1rem 0;
   text-align: left;
@@ -236,25 +249,38 @@ body {
 }
 
 .hero-stat-index {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   margin-bottom: 0.45rem;
-  color: rgba(255, 255, 255, 0.36);
+  color: rgba(255, 255, 255, 0.46);
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.5rem;
   font-weight: 400;
   letter-spacing: 0.18em;
 }
 
+.hero-stat-index::before {
+  width: 0.85rem;
+  height: 1px;
+  background: rgba(192, 164, 110, 0.76);
+  content: "";
+}
+
 .hero-stat-value {
-  font-size: clamp(1.6rem, 3.2vw, 2.65rem);
-  letter-spacing: -0.055em;
+  color: #d8bd89;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.9rem, 3.45vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
   line-height: 1;
 }
 
 .hero-stat dd {
   margin: 0.65rem 0 0;
-  color: rgba(255, 255, 255, 0.48);
-  font-size: clamp(0.58rem, 0.72vw, 0.68rem);
-  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: clamp(0.62rem, 0.76vw, 0.72rem);
+  letter-spacing: 0.1em;
   line-height: 1.55;
   text-transform: uppercase;
 }
@@ -273,6 +299,10 @@ body {
 }
 
 @media (max-width: 639px) {
+  .hero-section::before {
+    inset: 0.55rem;
+  }
+
   .hero-kicker {
     gap: 0.45rem;
     font-size: 0.45rem;
@@ -331,8 +361,8 @@ body {
   }
 
   .hero-headline-primary {
-    font-size: clamp(0.9rem, 3.4vw, 1.55rem);
-    letter-spacing: 0.4em;
+    font-size: clamp(0.9rem, 3.1vw, 1.4rem);
+    letter-spacing: 0.36em;
   }
 
   .hero-headline-secondary {
@@ -355,12 +385,12 @@ body {
   }
 
   .hero-stat-value {
-    font-size: clamp(1.15rem, 4vh, 1.8rem);
+    font-size: clamp(1.3rem, 4vh, 2rem);
   }
 
   .hero-stat dd {
     margin-top: 0.25rem;
-    font-size: clamp(0.5rem, 1.5vh, 0.65rem);
+    font-size: clamp(0.56rem, 1.5vh, 0.68rem);
   }
 
   .hero-scroll-hint {
@@ -426,12 +456,12 @@ body {
   }
 
   .hero-stat-value {
-    font-size: clamp(1.05rem, 4vh, 1.4rem);
+    font-size: clamp(1.15rem, 4vh, 1.55rem);
   }
 
   .hero-stat dd {
     margin-top: 0.2rem;
-    font-size: clamp(0.48rem, 1.2vh, 0.55rem);
+    font-size: clamp(0.52rem, 1.2vh, 0.6rem);
     line-height: 1.3;
   }
 

@@ -3,6 +3,9 @@ const nextConfig = {
   /* Static export for GitHub Pages deployment */
   output: "export",
 
+  /* Allow the local browser preview to connect to Next's dev HMR endpoint. */
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
+
   /*
    * GitHub Pages serves from /<repo-name>/ by default.
    * Set basePath and assetPrefix to the repository name.
