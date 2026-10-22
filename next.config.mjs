@@ -11,6 +11,11 @@ const nextConfig = {
   basePath: "/scroll-hero-animation",
   assetPrefix: "/scroll-hero-animation/",
 
+  /* Expose basePath as an env var so components can reference assets */
+  env: {
+    NEXT_PUBLIC_BASE_PATH: "/scroll-hero-animation",
+  },
+
   /* next/image is not supported in static export — use unoptimized */
   images: {
     unoptimized: true,

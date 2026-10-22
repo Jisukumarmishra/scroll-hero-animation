@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -259,15 +258,14 @@ export default function HeroSection() {
             className="gsap-hidden relative w-full max-w-[850px] mt-2 sm:mt-4 lg:mt-6"
             style={{ willChange: "transform" }}
           >
-            <Image
-              src="/images/car.svg"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/car.svg`}
               alt="Luxury sports car — hero visual"
               width={1200}
               height={500}
-              priority
               className="w-full h-auto object-contain drop-shadow-[0_25px_80px_rgba(192,164,110,0.12)]"
-              sizes="(max-width: 640px) 95vw, (max-width: 1024px) 80vw, 850px"
-              unoptimized
+              fetchPriority="high"
             />
           </div>
 
