@@ -13,6 +13,8 @@ const stats = [
   { value: "40%", label: "An unmistakable drive." },
 ];
 
+const statRevealPositions = [0.12, 0.2, 0.28, 0.36];
+
 function getCarTravelDistance(stage) {
   const viewportWidth = document.documentElement.clientWidth;
   const stageStyles = window.getComputedStyle(stage);
@@ -105,15 +107,27 @@ export default function HeroSection() {
 
       scrollTimeline.to(
         headlineScrollRef.current,
-        { y: -48, autoAlpha: 0.18, scale: 0.96, duration: 1, ease: "none" },
+        { y: -42, autoAlpha: 0.56, scale: 0.97, duration: 1, ease: "none" },
         0
       );
 
       scrollTimeline.to(
         statsScrollRef.current,
-        { y: -24, autoAlpha: 0, duration: 1, ease: "none" },
+        { y: -14, autoAlpha: 1, duration: 1, ease: "none" },
         0
       );
+
+      statsRef.current.filter(Boolean).forEach((stat, index) => {
+        scrollTimeline.to(
+          stat,
+          {
+            "--scroll-card-progress": 1,
+            duration: 0.32,
+            ease: "power2.out",
+          },
+          statRevealPositions[index]
+        );
+      });
 
       scrollTimeline.to(
         bgGlowRef.current,

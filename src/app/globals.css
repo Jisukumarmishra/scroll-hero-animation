@@ -280,19 +280,46 @@ body {
 .hero-stat {
   position: relative;
   min-width: 0;
+  z-index: 0;
   padding: 0.1rem 1rem 0;
   text-align: left;
 }
 
-.hero-stat:not(:first-child) {
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
+.hero-stat::before {
+  position: absolute;
+  z-index: 0;
+  inset: -0.55rem 0.15rem -0.7rem;
+  border: 1px solid rgba(224, 202, 166, 0.32);
+  border-radius: 0.9rem;
+  background: linear-gradient(145deg, rgba(192, 164, 110, 0.16), rgba(192, 164, 110, 0.045));
+  content: "";
+  opacity: var(--scroll-card-progress, 0);
+  pointer-events: none;
+  will-change: opacity;
 }
 
 .hero-stat:first-child {
   padding-left: 0;
 }
 
+.hero-stat:nth-child(2)::before {
+  border-color: rgba(146, 190, 198, 0.3);
+  background: linear-gradient(145deg, rgba(94, 145, 158, 0.18), rgba(94, 145, 158, 0.045));
+}
+
+.hero-stat:nth-child(3)::before {
+  border-color: rgba(173, 167, 128, 0.3);
+  background: linear-gradient(145deg, rgba(135, 132, 91, 0.18), rgba(135, 132, 91, 0.045));
+}
+
+.hero-stat:nth-child(4)::before {
+  border-color: rgba(218, 151, 116, 0.3);
+  background: linear-gradient(145deg, rgba(166, 99, 69, 0.18), rgba(166, 99, 69, 0.045));
+}
+
 .hero-stat dt {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -329,6 +356,8 @@ body {
 }
 
 .hero-stat dd {
+  position: relative;
+  z-index: 1;
   margin: 0.65rem 0 0;
   color: rgba(255, 255, 255, 0.62);
   font-size: clamp(0.62rem, 0.76vw, 0.72rem);
@@ -340,14 +369,6 @@ body {
 .hero-scroll-cue {
   backdrop-filter: blur(16px);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
-}
-
-@media (min-width: 640px) {
-  .hero-stat:nth-child(3),
-  .hero-stat:nth-child(4) {
-    border-top: 0;
-    padding-top: 0.1rem;
-  }
 }
 
 @media (max-width: 639px) {
@@ -383,14 +404,11 @@ body {
   }
 
   .hero-stat:nth-child(3) {
-    border-left: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
     padding-left: 0;
     padding-top: 0.85rem;
   }
 
   .hero-stat:nth-child(4) {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
     padding-top: 0.85rem;
   }
 }
@@ -548,11 +566,6 @@ body {
   .hero-stats {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.75rem;
-  }
-
-  .hero-stat:nth-child(3),
-  .hero-stat:nth-child(4) {
-    border-left: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .hero-stat dd {
