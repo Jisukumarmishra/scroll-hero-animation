@@ -13,18 +13,14 @@ const stats = [
   { value: "40%", label: "An unmistakable drive." },
 ];
 
-function getCarMotion() {
-  const viewportWidth = window.innerWidth;
-
-  if (viewportWidth < 640) {
-    return { x: -32, y: -14, scale: 0.9, rotation: -1 };
-  }
-
-  if (viewportWidth < 1024) {
-    return { x: -120, y: -40, scale: 0.86, rotation: -2 };
-  }
-
-  return { x: -240, y: -70, scale: 0.82, rotation: -3 };
+function getCarTravelDistance(stage) {
+  const viewportWidth = document.documentElement.clientWidth;
+  const stageStyles = window.getComputedStyle(stage);
+  const edgeInset = Number.parseFloat(stageStyles.left) || 0;
+  return Math.max(
+    0,
+    viewportWidth - stage.offsetWidth - edgeInset * 2
+  );
 }
 
 export default function HeroSection() {
@@ -36,23 +32,8 @@ export default function HeroSection() {
   const carEntranceRef = useRef(null);
   const statsRef = useRef([]);
   const statsScrollRef = useRef(null);
-  const scrollControlRef = useRef(null);
-  const scrollControlLabelRef = useRef(null);
-  const scrollControlIconRef = useRef(null);
   const scrollProgressRef = useRef(null);
-  const scrollTriggerRef = useRef(null);
-  const prefersReducedMotionRef = useRef(false);
   const bgGlowRef = useRef(null);
-
-  const handleScrollControl = () => {
-    const trigger = scrollTriggerRef.current;
-    if (!trigger || prefersReducedMotionRef.current) return;
-
-    window.scrollTo({
-      top: trigger.progress < 0.5 ? trigger.end : trigger.start,
-      behavior: "smooth",
-    });
-  };
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -60,11 +41,6 @@ export default function HeroSection() {
     ).matches;
 
     if (prefersReducedMotion) {
-      prefersReducedMotionRef.current = true;
-      if (scrollControlRef.current) scrollControlRef.current.disabled = true;
-      if (scrollControlLabelRef.current) {
-        scrollControlLabelRef.current.textContent = "Motion reduced";
-      }
       containerRef.current
         ?.querySelectorAll(".gsap-hidden")
         .forEach((element) => {
@@ -102,7 +78,6 @@ export default function HeroSection() {
         "-=0.55"
       );
 
-      let showingReturnAction = false;
       const scrollTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: heroRef.current,
@@ -112,32 +87,16 @@ export default function HeroSection() {
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const shouldShowReturnAction = self.progress >= 0.5;
-            if (shouldShowReturnAction === showingReturnAction) return;
-
-            showingReturnAction = shouldShowReturnAction;
-            if (scrollControlLabelRef.current) {
-              scrollControlLabelRef.current.textContent =
-                shouldShowReturnAction ? "Return to start" : "Scroll to explore";
-            }
-
-            if (scrollControlIconRef.current) {
-              gsap.set(scrollControlIconRef.current, {
-                rotation: shouldShowReturnAction ? 180 : 0,
-              });
-            }
-          },
         },
       });
 
       scrollTimeline.to(
         carMotionRef.current,
         {
-          x: () => getCarMotion().x,
-          y: () => getCarMotion().y,
-          scale: () => getCarMotion().scale,
-          rotation: () => getCarMotion().rotation,
+          x: () => getCarTravelDistance(carMotionRef.current),
+          y: -8,
+          scale: 0.96,
+          rotation: 0.4,
           duration: 1,
           ease: "none",
         },
@@ -168,13 +127,10 @@ export default function HeroSection() {
         0
       );
 
-      scrollTriggerRef.current = scrollTimeline.scrollTrigger;
-
       ScrollTrigger.refresh();
     }, containerRef);
 
     return () => {
-      scrollTriggerRef.current = null;
       ctx.revert();
     };
   }, []);
@@ -192,8 +148,41 @@ export default function HeroSection() {
             ref={bgGlowRef}
             className="hero-glow absolute left-1/2 top-[12%] h-[600px] w-[900px] -translate-x-1/2 rounded-full"
           />
-          <div className="hero-horizon absolute inset-x-0" />
           <div className="hero-floor-glow absolute left-1/2" />
+        </div>
+
+        <div className="hero-runway pointer-events-none absolute inset-x-0" aria-hidden="true">
+          <div className="hero-runway-surface absolute inset-0" />
+          <div className="hero-runway-centerline absolute inset-x-0" />
+          <span className="hero-runway-marker hero-runway-start absolute">Start</span>
+          <span className="hero-runway-marker hero-runway-finish absolute">Finish</span>
+          <div className="hero-runway-progress absolute inset-x-0">
+            <div
+              ref={scrollProgressRef}
+              className="h-full origin-left scale-x-0 bg-[#c0a46e]"
+            />
+          </div>
+        </div>
+
+        <div className="hero-car-path pointer-events-none absolute inset-x-0">
+          <div
+            ref={carMotionRef}
+            className="car-motion hero-car-stage relative"
+            style={{ willChange: "transform" }}
+          >
+            <div ref={carEntranceRef} className="hero-car-image gsap-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/car-hero-v2.png`}
+                alt="Graphite luxury sports coupe facing right on the hero runway"
+                width={1774}
+                height={887}
+                className="hero-car-visual h-auto w-full object-contain"
+                fetchPriority="high"
+                onLoad={() => ScrollTrigger.refresh()}
+              />
+            </div>
+          </div>
         </div>
 
         <header className="hero-header absolute inset-x-0 top-0 z-20 flex items-center justify-between">
@@ -213,7 +202,7 @@ export default function HeroSection() {
           </span>
         </header>
 
-        <div className="hero-content relative z-10 flex h-full flex-col items-center justify-center px-4 pb-16 pt-20 sm:px-8 sm:pb-20 sm:pt-24 lg:px-16">
+        <div className="hero-content relative z-10 flex h-full flex-col items-center justify-between px-4 pb-16 pt-20 sm:px-8 sm:pb-20 sm:pt-24 lg:px-16">
           <div ref={headlineScrollRef} className="hero-title-block text-center">
             <p className="hero-kicker">
               <span /> A study in design and performance <span />
@@ -229,25 +218,6 @@ export default function HeroSection() {
             <p className="hero-caption">
               Presence in every line. Purpose in every drive.
             </p>
-          </div>
-
-          <div
-            ref={carMotionRef}
-            className="car-motion hero-car-stage relative mt-1 sm:mt-3"
-            style={{ willChange: "transform" }}
-          >
-            <div ref={carEntranceRef} className="hero-car-image gsap-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/car-hero-v2.png`}
-                alt="Graphite luxury sports coupe with warm studio highlights"
-                width={1774}
-                height={887}
-                className="h-auto w-full object-contain"
-                fetchPriority="high"
-                onLoad={() => ScrollTrigger.refresh()}
-              />
-            </div>
           </div>
 
           <dl
@@ -277,22 +247,9 @@ export default function HeroSection() {
         </div>
 
         <div className="absolute inset-x-0 bottom-0 z-20">
-          <div className="h-px bg-white/10" aria-hidden="true">
-            <div
-              ref={scrollProgressRef}
-              className="h-full origin-left scale-x-0 bg-[#c0a46e]"
-            />
-          </div>
-          <button
-            ref={scrollControlRef}
-            type="button"
-            onClick={handleScrollControl}
-            className="hero-scroll-hint absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/15 bg-[#0b0b0bd9] px-5 py-3 text-[10px] font-medium uppercase tracking-[0.25em] text-white/75 transition-colors hover:border-[#c0a46e]/60 hover:text-[#e8d5a3] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c0a46e] disabled:cursor-not-allowed disabled:opacity-50 sm:bottom-7"
-            aria-label="Scroll through the hero animation or return to the start"
-          >
-            <span ref={scrollControlLabelRef}>Scroll to explore</span>
+          <div className="hero-scroll-cue absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/15 bg-[#0b0b0bd9] px-5 py-3 text-[10px] font-medium uppercase tracking-[0.25em] text-white/75 sm:bottom-7">
+            <span>Scroll to drive</span>
             <svg
-              ref={scrollControlIconRef}
               className="h-3 w-3"
               viewBox="0 0 12 12"
               fill="none"
@@ -306,7 +263,7 @@ export default function HeroSection() {
                 strokeLinejoin="round"
               />
             </svg>
-          </button>
+          </div>
         </div>
       </section>
     </div>
