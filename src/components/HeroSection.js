@@ -102,6 +102,7 @@ export default function HeroSection() {
         "-=0.55"
       );
 
+      let showingReturnAction = false;
       const scrollTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: heroRef.current,
@@ -112,18 +113,18 @@ export default function HeroSection() {
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
-            if (scrollProgressRef.current) {
-              gsap.set(scrollProgressRef.current, { scaleX: self.progress });
-            }
+            const shouldShowReturnAction = self.progress >= 0.5;
+            if (shouldShowReturnAction === showingReturnAction) return;
 
+            showingReturnAction = shouldShowReturnAction;
             if (scrollControlLabelRef.current) {
               scrollControlLabelRef.current.textContent =
-                self.progress >= 0.5 ? "Return to start" : "Scroll to explore";
+                shouldShowReturnAction ? "Return to start" : "Scroll to explore";
             }
 
             if (scrollControlIconRef.current) {
               gsap.set(scrollControlIconRef.current, {
-                rotation: self.progress >= 0.5 ? 180 : 0,
+                rotation: shouldShowReturnAction ? 180 : 0,
               });
             }
           },
@@ -158,6 +159,12 @@ export default function HeroSection() {
       scrollTimeline.to(
         bgGlowRef.current,
         { opacity: 0.34, scale: 1.22, duration: 1, ease: "none" },
+        0
+      );
+
+      scrollTimeline.to(
+        scrollProgressRef.current,
+        { scaleX: 1, duration: 1, ease: "none" },
         0
       );
 
