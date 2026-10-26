@@ -1,9 +1,14 @@
 
 /** @type {import('next').NextConfig} */
+const basePath = "/scroll-hero-animation";
+
 const nextConfig = {
   output: "export",
-  basePath: "/scroll-hero-animation",
-  assetPrefix: "/scroll-hero-animation/",
+  basePath,
+  assetPrefix: `${basePath}/`,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   images: {
     unoptimized: true,
   },
